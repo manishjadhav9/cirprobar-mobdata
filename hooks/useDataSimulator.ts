@@ -16,7 +16,6 @@ export const useDataSimulator = () => {
         const interval = setInterval(() => {
             setUsedData((prev) => {
                 if (prev >= totalData) {
-                    clearInterval(interval);
                     return totalData;
                 }
                 // Simulate random data usage
