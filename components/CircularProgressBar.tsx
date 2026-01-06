@@ -70,8 +70,8 @@ const CircularProgressBar: React.FC<CircularProgressBarProps> = ({ percentage, t
 
     // Color helper for Text
     const getColor = (p: number) => {
-        if (p > 0.85) return '#F44336';
-        if (p > 0.6) return '#FF9800';
+        if (p > 0.8) return '#F44336';
+        if (p > 0.5) return '#FF9800';
         return '#4CAF50';
     };
     const color = getColor(percentage);
