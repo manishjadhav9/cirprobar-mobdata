@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Button, Text } from 'react-native';
+import { Button, StyleSheet, Text, View } from 'react-native';
 import CircularProgressBar from '../../components/CircularProgressBar';
 import RechargeSuccessModal from '../../components/RechargeSuccessModal';
 import { useDataSimulator } from '../../hooks/useDataSimulator';
 
 export default function HomeScreen() {
-  const { totalData, usedData, percentage, recharge } = useDataSimulator();
+  const { totalData, usedData, percentage, recharge, userName, planName } = useDataSimulator();
   const [modalVisible, setModalVisible] = useState(false);
 
   const handleRecharge = () => {
@@ -20,7 +20,8 @@ export default function HomeScreen() {
         onNext={() => setModalVisible(false)}
       />
 
-      <Text style={styles.title}>Data Usage Monitor</Text>
+      <Text style={styles.title}>Hello, {userName}</Text>
+      <Text style={styles.subtitle}>{planName}</Text>
 
       <View style={styles.chartContainer}>
         <CircularProgressBar
@@ -60,6 +61,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 40,
     color: '#333',
+  },
+  subtitle: {
+    fontSize: 16,
+    color: '#666',
+    marginBottom: 30, // Adjust spacing
   },
   chartContainer: {
     marginBottom: 50,

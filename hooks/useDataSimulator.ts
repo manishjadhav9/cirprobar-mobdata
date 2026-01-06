@@ -1,44 +1,45 @@
-import { useState, useEffect, useCallback } from 'react';
-
-const TOTAL_DATA_MB = 2048; // 2 GB
+import { useCallback, useEffect, useState } from 'react';
+import data from '../assets/data.json'; // Importing JSON directly
 
 export const useDataSimulator = () => {
-    const [usedData, setUsedData] = useState(0);
+    // Initial state from JSON
+    const [totalData, setTotalData] = useState(data.totalDataMB);
+    const [usedData, setUsedData] = useState(data.initialUsedMB);
+    const [userName, setUserName] = useState(data.userName);
+    const [planName, setPlanName] = useState(data.planName);
 
     useEffect(() => {
+        // Here we could fetch from an API, but for now we rely on the imported JSON.
+        // We can simulate an API delay if needed, but it's not requested.
+
+        // Start simulation loop
         const interval = setInterval(() => {
             setUsedData((prev) => {
-                if (prev >= TOTAL_DATA_MB) {
+                if (prev >= totalData) {
                     clearInterval(interval);
-                    return TOTAL_DATA_MB;
+                    return totalData;
                 }
-                // Simulate random data usage between 5MB and 20MB per second
+                // Simulate random data usage
                 const increment = Math.random() * 15 + 5;
-                return Math.min(prev + increment, TOTAL_DATA_MB);
+                return Math.min(prev + increment, totalData);
             });
         }, 1000);
 
         return () => clearInterval(interval);
-    }, [usedData]); // Restart if usedData changes? No, interval dependency.
-    // Actually, dependency array should be empty to run once, or handle cleanup correctly.
-    // If I put usedData in dependency, it restarts interval every tick.
-    // Better: Empty dependency, but check 'prev' inside setter.
-    // However, I want to stop if full. The 'prev' check handles that.
-
-    // Correction: The setInterval closure captures the initial 'usedData' if not careful?
-    // No, setter function form 'setUsedData(prev => ...)' is safe.
-    // But to stop exactly when full, I need to check inside.
+    }, [totalData]);
 
     const recharge = useCallback(() => {
         setUsedData(0);
     }, []);
 
-    const percentage = usedData / TOTAL_DATA_MB;
+    const percentage = usedData / totalData;
 
     return {
-        totalData: TOTAL_DATA_MB,
+        totalData,
         usedData,
         percentage,
         recharge,
+        userName,
+        planName
     };
 };
